@@ -204,7 +204,7 @@ export default function ReefMonitoringPage() {
             type="file"
             accept="video/*"
             onChange={(e) => setFile(e.target.files?.[0] ?? null)}
-            className="rounded-xl bg-white p-4"
+            className="rounded-xl bg-white p-4 text-[#16305A]"
           />
 
           {isUploading && (
@@ -226,14 +226,14 @@ export default function ReefMonitoringPage() {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="rounded-xl bg-white p-4"
+            className="rounded-xl bg-white p-4 text-[#16305A]"
           />
 
           <input
             type="time"
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            className="rounded-xl bg-white p-4"
+            className="rounded-xl bg-white p-4 text-[#16305A]"
           />
 
           <input
@@ -241,7 +241,7 @@ export default function ReefMonitoringPage() {
             placeholder="Location / reef name"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className="rounded-xl bg-white p-4"
+            className="rounded-xl bg-white p-4 text-[#16305A]"
           />
 
           <input
@@ -249,14 +249,14 @@ export default function ReefMonitoringPage() {
             placeholder="Camera used"
             value={camera}
             onChange={(e) => setCamera(e.target.value)}
-            className="rounded-xl bg-white p-4"
+            className="rounded-xl bg-white p-4 text-[#16305A]"
           />
 
           <textarea
             placeholder="Add comments"
             value={comments}
             onChange={(e) => setComments(e.target.value)}
-            className="min-h-32 rounded-xl bg-white p-4"
+            className="min-h-32 rounded-xl bg-white p-4 text-[#16305A]"
           />
 
           <div className="rounded-2xl bg-white/70 p-5">
@@ -275,7 +275,7 @@ export default function ReefMonitoringPage() {
               placeholder="Email address (optional)"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-4 w-full rounded-xl bg-white p-4"
+              className="mt-4 w-full rounded-xl bg-white p-4 text-[#16305A]"
             />
 
             <input
@@ -283,7 +283,7 @@ export default function ReefMonitoringPage() {
               placeholder="Instagram handle (optional)"
               value={instagram}
               onChange={(e) => setInstagram(e.target.value)}
-              className="mt-4 w-full rounded-xl bg-white p-4"
+              className="mt-4 w-full rounded-xl bg-white p-4 text-[#16305A]"
             />
           </div>
 
