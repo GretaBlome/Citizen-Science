@@ -226,14 +226,14 @@ export default function ReefMonitoringPage() {
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="rounded-xl bg-white p-4 text-[#16305A]"
+            className="rounded-xl bg-white p-4 text-[#16305A] [color-scheme:light]"
           />
 
           <input
             type="time"
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            className="rounded-xl bg-white p-4 text-[#16305A]"
+            className="rounded-xl bg-white p-4 text-[#16305A] [color-scheme:light]"
           />
 
           <input
