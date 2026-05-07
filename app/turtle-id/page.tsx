@@ -44,7 +44,6 @@ export default function TurtleIdPage() {
           batch.map(async (selectedFile) => {
             let finalFile = selectedFile;
 
-            // Nur sehr große Dateien leicht optimieren
             if (selectedFile.size > 8 * 1024 * 1024) {
               finalFile = await imageCompression(selectedFile, {
                 maxSizeMB: 4,
@@ -174,13 +173,13 @@ export default function TurtleIdPage() {
           ← Back
         </Link>
 
-        <h1 className="mt-8 text-4xl font-bold text-[#16305A]">
-          Turtle ID
-        </h1>
+        <h1 className="mt-8 text-4xl font-bold text-[#16305A]">Turtle ID</h1>
 
         <p className="mt-3 text-[#16305A]">
           Upload one or more turtle photos and add a few details about your
-          observation.
+          observation. Please make one upload per individual turtle. If you add
+          many photos, it may take a little longer — hang tight, the turtle is
+          worth it.
         </p>
 
         <form className="mt-8 flex flex-col gap-5">
@@ -189,7 +188,7 @@ export default function TurtleIdPage() {
             accept="image/*"
             multiple
             onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
-            className="rounded-xl bg-white p-4"
+            className="rounded-xl bg-white p-4 text-[#16305A]"
           />
 
           {files.length > 0 && (
@@ -214,17 +213,21 @@ export default function TurtleIdPage() {
           )}
 
           <input
-            type="date"
+            type="text"
+            inputMode="numeric"
+            placeholder="Date (DD.MM.YYYY)"
             value={date}
             onChange={(e) => setDate(e.target.value)}
-            className="rounded-xl bg-white p-4"
+            className="rounded-xl bg-white p-4 text-[#16305A] placeholder:text-[#16305A]"
           />
 
           <input
-            type="time"
+            type="text"
+            inputMode="numeric"
+            placeholder="Time (HH:MM)"
             value={time}
             onChange={(e) => setTime(e.target.value)}
-            className="rounded-xl bg-white p-4"
+            className="rounded-xl bg-white p-4 text-[#16305A] placeholder:text-[#16305A]"
           />
 
           <input
@@ -232,7 +235,7 @@ export default function TurtleIdPage() {
             placeholder="Location"
             value={location}
             onChange={(e) => setLocation(e.target.value)}
-            className="rounded-xl bg-white p-4"
+            className="rounded-xl bg-white p-4 text-[#16305A] placeholder:text-[#16305A]"
           />
 
           <input
@@ -240,14 +243,14 @@ export default function TurtleIdPage() {
             placeholder="Behavior of the turtle"
             value={behavior}
             onChange={(e) => setBehavior(e.target.value)}
-            className="rounded-xl bg-white p-4"
+            className="rounded-xl bg-white p-4 text-[#16305A] placeholder:text-[#16305A]"
           />
 
           <textarea
-            placeholder="Add comments"
+            placeholder="Special observations or unusual features"
             value={comments}
             onChange={(e) => setComments(e.target.value)}
-            className="min-h-32 rounded-xl bg-white p-4"
+            className="min-h-32 rounded-xl bg-white p-4 text-[#16305A] placeholder:text-[#16305A]"
           />
 
           <div className="rounded-2xl bg-white/70 p-5">
@@ -256,9 +259,9 @@ export default function TurtleIdPage() {
             </h2>
 
             <p className="mt-2 text-sm text-[#16305A]">
-              Leave your email address or Instagram handle if you would like
-              to receive updates, connect with the community, or hear more
-              about the project.
+              Leave your email address or Instagram handle if you would like to
+              receive updates, connect with the community, or hear more about
+              the project.
             </p>
 
             <input
@@ -266,7 +269,7 @@ export default function TurtleIdPage() {
               placeholder="Email address (optional)"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              className="mt-4 w-full rounded-xl bg-white p-4"
+              className="mt-4 w-full rounded-xl bg-white p-4 text-[#16305A] placeholder:text-[#16305A]"
             />
 
             <input
@@ -274,7 +277,7 @@ export default function TurtleIdPage() {
               placeholder="Instagram handle (optional)"
               value={instagram}
               onChange={(e) => setInstagram(e.target.value)}
-              className="mt-4 w-full rounded-xl bg-white p-4"
+              className="mt-4 w-full rounded-xl bg-white p-4 text-[#16305A] placeholder:text-[#16305A]"
             />
           </div>
 
