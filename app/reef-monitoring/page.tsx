@@ -223,25 +223,21 @@ export default function ReefMonitoringPage() {
           )}
 
 <input
-  type="date"
+  type="text"
+  inputMode="numeric"
+  placeholder="Date (DD.MM.YYYY)"
   value={date}
   onChange={(e) => setDate(e.target.value)}
-  style={{
-    color: "#16305A",
-    colorScheme: "light",
-  }}
-  className="rounded-xl bg-white p-4"
+  className="rounded-xl bg-white p-4 text-[#16305A] placeholder:text-[#16305A]"
 />
 
 <input
-  type="time"
+  type="text"
+  inputMode="numeric"
+  placeholder="Time (HH:MM)"
   value={time}
   onChange={(e) => setTime(e.target.value)}
-  style={{
-    color: "#16305A",
-    colorScheme: "light",
-  }}
-  className="rounded-xl bg-white p-4"
+  className="rounded-xl bg-white p-4 text-[#16305A] placeholder:text-[#16305A]"
 />
 
           <input
