@@ -7,6 +7,11 @@ import { supabase } from "@/lib/supabase";
 
 const BUCKET_NAME = "turtle-id";
 const CONCURRENT_UPLOADS = 2;
+const MIN_UPLOAD_SCREEN_TIME = 10000;
+
+function wait(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
 export default function TurtleIdPage() {
   const [files, setFiles] = useState<File[]>([]);
@@ -32,6 +37,8 @@ export default function TurtleIdPage() {
 
     setIsUploading(true);
     setUploadProgress(0);
+
+    const uploadScreenStartedAt = Date.now();
 
     try {
       let completedUploads = 0;
@@ -70,7 +77,6 @@ export default function TurtleIdPage() {
             }
 
             completedUploads += 1;
-
             setUploadProgress(
               Math.round((completedUploads / files.length) * 100)
             );
@@ -106,6 +112,15 @@ export default function TurtleIdPage() {
         throw insertError;
       }
 
+      const elapsed = Date.now() - uploadScreenStartedAt;
+      const remainingTime = Math.max(0, MIN_UPLOAD_SCREEN_TIME - elapsed);
+
+      if (remainingTime > 0) {
+        await wait(remainingTime);
+      }
+
+      setUploadProgress(100);
+
       setFiles([]);
       setDate("");
       setTime("");
@@ -114,7 +129,6 @@ export default function TurtleIdPage() {
       setComments("");
       setEmail("");
       setInstagram("");
-      setUploadProgress(0);
       setUploadComplete(true);
     } catch (error: any) {
       console.error(error);
@@ -167,7 +181,48 @@ export default function TurtleIdPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#EDE6D8] p-8">
+    <main className="relative min-h-screen bg-[#EDE6D8] p-8">
+      {isUploading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#16305A]/95 px-4 py-6">
+          <div className="w-full max-w-md rounded-[2rem] bg-[#EDE6D8] p-4 text-center shadow-2xl md:max-w-lg">
+            <video
+              src="/turtle-analysis.mp4"
+              autoPlay
+              loop
+              muted
+              playsInline
+              className="h-[420px] w-full rounded-3xl object-cover md:h-[520px]"
+            />
+
+            <h2 className="mt-5 text-2xl font-bold text-[#16305A]">
+              Analyzing facial scale patterns...
+            </h2>
+
+            <p className="mt-3 text-sm leading-relaxed text-[#16305A]/80">
+              Your observation is being prepared for individual turtle ID
+              matching.
+            </p>
+
+            <div className="mt-5">
+              <div className="h-3 w-full rounded-full bg-white">
+                <div
+                  className="h-3 rounded-full bg-[#16305A] transition-all"
+                  style={{ width: `${uploadProgress}%` }}
+                />
+              </div>
+
+              <p className="mt-3 text-sm font-semibold text-[#16305A]">
+                Uploading {uploadProgress}%
+              </p>
+            </div>
+
+            <p className="mt-4 text-xs text-[#16305A]/70">
+              Please keep this page open.
+            </p>
+          </div>
+        </div>
+      )}
+
       <div className="mx-auto max-w-xl">
         <Link href="/" className="text-[#16305A] underline">
           ← Back
@@ -194,21 +249,6 @@ export default function TurtleIdPage() {
           {files.length > 0 && (
             <div className="rounded-xl bg-white p-4 text-sm text-[#16305A]">
               {files.length} photo{files.length > 1 ? "s" : ""} selected
-            </div>
-          )}
-
-          {isUploading && (
-            <div className="rounded-xl bg-white p-4">
-              <p className="text-sm font-semibold text-[#16305A]">
-                Uploading: {uploadProgress}%
-              </p>
-
-              <div className="mt-2 h-3 w-full rounded-full bg-gray-200">
-                <div
-                  className="h-3 rounded-full bg-[#16305A]"
-                  style={{ width: `${uploadProgress}%` }}
-                />
-              </div>
             </div>
           )}
 
