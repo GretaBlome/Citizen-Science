@@ -182,28 +182,45 @@ export default function TurtleIdPage() {
 
   return (
     <main className="relative min-h-screen bg-[#EDE6D8] p-8">
+      <style jsx global>{`
+        input[type="date"],
+        input[type="time"] {
+          color: #16305a !important;
+          background-color: #ffffff !important;
+          -webkit-text-fill-color: #16305a !important;
+          opacity: 1 !important;
+          color-scheme: light;
+          appearance: none;
+          -webkit-appearance: none;
+        }
+
+        input[type="date"]::-webkit-date-and-time-value,
+        input[type="time"]::-webkit-date-and-time-value {
+          color: #16305a !important;
+          text-align: left;
+        }
+
+        input[type="date"]::-webkit-calendar-picker-indicator,
+        input[type="time"]::-webkit-calendar-picker-indicator {
+          opacity: 1;
+          filter: invert(18%) sepia(28%) saturate(1571%) hue-rotate(181deg)
+            brightness(87%) contrast(91%);
+        }
+      `}</style>
+
       {isUploading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#16305A]/95 px-4 py-6">
-          <div className="w-full max-w-md rounded-[2rem] bg-[#EDE6D8] p-4 text-center shadow-2xl md:max-w-lg">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#16305A]/95 px-3 py-4">
+          <div className="flex max-h-[96vh] w-full max-w-md flex-col rounded-[2rem] bg-[#EDE6D8] p-3 text-center shadow-2xl md:max-w-lg">
             <video
               src="/turtle-analysis.mp4"
               autoPlay
               loop
               muted
               playsInline
-              className="h-[420px] w-full rounded-3xl object-cover md:h-[520px]"
+              className="max-h-[72vh] w-full rounded-3xl object-contain"
             />
 
-            <h2 className="mt-5 text-2xl font-bold text-[#16305A]">
-              Analyzing facial scale patterns...
-            </h2>
-
-            <p className="mt-3 text-sm leading-relaxed text-[#16305A]/80">
-              Your observation is being prepared for individual turtle ID
-              matching.
-            </p>
-
-            <div className="mt-5">
+            <div className="mt-4">
               <div className="h-3 w-full rounded-full bg-white">
                 <div
                   className="h-3 rounded-full bg-[#16305A] transition-all"
@@ -212,13 +229,13 @@ export default function TurtleIdPage() {
               </div>
 
               <p className="mt-3 text-sm font-semibold text-[#16305A]">
-                Uploading {uploadProgress}%
+                Uploading observation {uploadProgress}%
+              </p>
+
+              <p className="mt-2 text-xs text-[#16305A]/70">
+                Please keep this page open.
               </p>
             </div>
-
-            <p className="mt-4 text-xs text-[#16305A]/70">
-              Please keep this page open.
-            </p>
           </div>
         </div>
       )}
@@ -252,23 +269,31 @@ export default function TurtleIdPage() {
             </div>
           )}
 
-          <input
-            type="text"
-            inputMode="numeric"
-            placeholder="Date (DD.MM.YYYY)"
-            value={date}
-            onChange={(e) => setDate(e.target.value)}
-            className="rounded-xl bg-white p-4 text-[#16305A] placeholder:text-[#16305A]"
-          />
+          <div className="rounded-2xl bg-white/70 p-5">
+            <label className="text-sm font-semibold text-[#16305A]">
+              Date and time of observation
+            </label>
 
-          <input
-            type="text"
-            inputMode="numeric"
-            placeholder="Time (HH:MM)"
-            value={time}
-            onChange={(e) => setTime(e.target.value)}
-            className="rounded-xl bg-white p-4 text-[#16305A] placeholder:text-[#16305A]"
-          />
+            <div className="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <input
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                className="min-h-[56px] rounded-xl bg-white p-4 text-base font-semibold text-[#16305A]"
+              />
+
+              <input
+                type="time"
+                value={time}
+                onChange={(e) => setTime(e.target.value)}
+                className="min-h-[56px] rounded-xl bg-white p-4 text-base font-semibold text-[#16305A]"
+              />
+            </div>
+
+            <p className="mt-2 text-xs text-[#16305A]/70">
+              Tap the fields to open your phone’s calendar and time picker.
+            </p>
+          </div>
 
           <input
             type="text"
