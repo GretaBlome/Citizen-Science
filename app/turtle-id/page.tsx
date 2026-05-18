@@ -3,9 +3,13 @@
 import { useState } from "react";
 import Link from "next/link";
 import imageCompression from "browser-image-compression";
+import * as tus from "tus-js-client";
 import { supabase } from "@/lib/supabase";
 
 const BUCKET_NAME = "turtle-id";
+const SUPABASE_PROJECT_ID = "obychdtafksanzqlkkcq";
+const SUPABASE_ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+
 const CONCURRENT_UPLOADS = 2;
 const MIN_UPLOAD_SCREEN_TIME = 10000;
 
@@ -29,9 +33,101 @@ export default function TurtleIdPage() {
   const [uploadProgress, setUploadProgress] = useState(0);
   const [uploadComplete, setUploadComplete] = useState(false);
 
+  async function uploadVideoWithTus(
+    file: File,
+    filePath: string,
+    baseProgress: number,
+    progressShare: number
+  ) {
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    const token = session?.access_token || SUPABASE_ANON_KEY;
+
+    if (!token) {
+      throw new Error("Missing Supabase token.");
+    }
+
+    return new Promise<void>((resolve, reject) => {
+      const upload = new tus.Upload(file, {
+        endpoint: `https://${SUPABASE_PROJECT_ID}.storage.supabase.co/storage/v1/upload/resumable`,
+
+        retryDelays: [0, 3000, 5000, 10000, 20000],
+
+        headers: {
+          authorization: `Bearer ${token}`,
+          "x-upsert": "false",
+        },
+
+        uploadDataDuringCreation: true,
+        removeFingerprintOnSuccess: true,
+        chunkSize: 6 * 1024 * 1024,
+
+        metadata: {
+          bucketName: BUCKET_NAME,
+          objectName: filePath,
+          contentType: file.type || "video/mp4",
+          cacheControl: "3600",
+        },
+
+        onError(error) {
+          console.error("TUS upload failed:", error);
+          reject(error);
+        },
+
+        onProgress(bytesUploaded, bytesTotal) {
+          const fileProgress = bytesUploaded / bytesTotal;
+          const totalProgress = Math.round(
+            baseProgress + fileProgress * progressShare
+          );
+
+          setUploadProgress(Math.min(totalProgress, 99));
+        },
+
+        onSuccess() {
+          resolve();
+        },
+      });
+
+      upload.findPreviousUploads().then((previousUploads) => {
+        if (previousUploads.length) {
+          upload.resumeFromPreviousUpload(previousUploads[0]);
+        }
+
+        upload.start();
+      });
+    });
+  }
+
+  async function uploadImageNormally(file: File, filePath: string) {
+    let finalFile = file;
+
+    if (file.size > 8 * 1024 * 1024) {
+      finalFile = await imageCompression(file, {
+        maxSizeMB: 4,
+        maxWidthOrHeight: 3500,
+        initialQuality: 0.95,
+        useWebWorker: true,
+      });
+    }
+
+    const { error: uploadError } = await supabase.storage
+      .from(BUCKET_NAME)
+      .upload(filePath, finalFile, {
+        contentType: finalFile.type,
+        upsert: false,
+      });
+
+    if (uploadError) {
+      console.error("Image upload error:", uploadError);
+      throw uploadError;
+    }
+  }
+
   async function handleSubmit() {
     if (files.length === 0) {
-      alert("Please choose at least one turtle photo.");
+      alert("Please choose at least one turtle photo or video.");
       return;
     }
 
@@ -41,51 +137,43 @@ export default function TurtleIdPage() {
     const uploadScreenStartedAt = Date.now();
 
     try {
-      let completedUploads = 0;
       const uploadedPaths: string[] = [];
+      const progressShare = 100 / files.length;
 
-      for (let i = 0; i < files.length; i += CONCURRENT_UPLOADS) {
-        const batch = files.slice(i, i + CONCURRENT_UPLOADS);
+      for (let i = 0; i < files.length; i++) {
+        const selectedFile = files[i];
 
-        const batchPaths = await Promise.all(
-          batch.map(async (selectedFile) => {
-            let finalFile = selectedFile;
+        const isImage = selectedFile.type.startsWith("image/");
+        const isVideo = selectedFile.type.startsWith("video/");
 
-            if (selectedFile.size > 8 * 1024 * 1024) {
-              finalFile = await imageCompression(selectedFile, {
-                maxSizeMB: 4,
-                maxWidthOrHeight: 3500,
-                initialQuality: 0.95,
-                useWebWorker: true,
-              });
-            }
+        if (!isImage && !isVideo) {
+          throw new Error("Please upload only image or video files.");
+        }
 
-            const fileExt = finalFile.name.split(".").pop();
-            const fileName = `${crypto.randomUUID()}.${fileExt}`;
-            const filePath = `uploads/${fileName}`;
+        const fileExt = selectedFile.name.split(".").pop();
+        const fileName = `${crypto.randomUUID()}.${fileExt}`;
+        const filePath = `uploads/${fileName}`;
 
-            const { error: uploadError } = await supabase.storage
-              .from(BUCKET_NAME)
-              .upload(filePath, finalFile, {
-                contentType: finalFile.type,
-                upsert: false,
-              });
+        const baseProgress = i * progressShare;
 
-            if (uploadError) {
-              console.error("Upload error:", uploadError);
-              throw uploadError;
-            }
+        if (isVideo) {
+          await uploadVideoWithTus(
+            selectedFile,
+            filePath,
+            baseProgress,
+            progressShare
+          );
+        }
 
-            completedUploads += 1;
-            setUploadProgress(
-              Math.round((completedUploads / files.length) * 100)
-            );
+        if (isImage) {
+          await uploadImageNormally(selectedFile, filePath);
 
-            return filePath;
-          })
-        );
+          setUploadProgress(
+            Math.round(((i + 1) / files.length) * 100)
+          );
+        }
 
-        uploadedPaths.push(...batchPaths);
+        uploadedPaths.push(filePath);
       }
 
       const { error: insertError } = await supabase
@@ -233,7 +321,7 @@ export default function TurtleIdPage() {
               </p>
 
               <p className="mt-2 text-xs text-[#16305A]/70">
-                Please keep this page open.
+                Please keep this page open. Videos may take a little longer.
               </p>
             </div>
           </div>
@@ -248,16 +336,16 @@ export default function TurtleIdPage() {
         <h1 className="mt-8 text-4xl font-bold text-[#16305A]">Turtle ID</h1>
 
         <p className="mt-3 text-[#16305A]">
-          Upload one or more turtle photos and add a few details about your
-          observation. Please make one upload per individual turtle. If you add
-          many photos, it may take a little longer — hang tight, the turtle is
-          worth it.
+          Upload one or more turtle photos or videos and add a few details about
+          your observation. Please make one upload per individual turtle. If you
+          add many files or videos, it may take a little longer — hang tight, the
+          turtle is worth it.
         </p>
 
         <form className="mt-8 flex flex-col gap-5">
           <input
             type="file"
-            accept="image/*"
+            accept="image/*,video/*"
             multiple
             onChange={(e) => setFiles(Array.from(e.target.files ?? []))}
             className="rounded-xl bg-white p-4 text-[#16305A]"
@@ -265,7 +353,7 @@ export default function TurtleIdPage() {
 
           {files.length > 0 && (
             <div className="rounded-xl bg-white p-4 text-sm text-[#16305A]">
-              {files.length} photo{files.length > 1 ? "s" : ""} selected
+              {files.length} file{files.length > 1 ? "s" : ""} selected
             </div>
           )}
 
@@ -354,7 +442,7 @@ export default function TurtleIdPage() {
           >
             {isUploading
               ? `Uploading ${uploadProgress}%`
-              : "Upload Turtle Photos"}
+              : "Upload Turtle Files"}
           </button>
         </form>
       </div>
