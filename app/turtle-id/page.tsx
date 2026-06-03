@@ -247,11 +247,16 @@ export default function TurtleIdPage() {
             <h2 className="text-2xl font-bold text-[#16305A]">
               Like this project?
             </h2>
+<p className="mt-3 text-[#16305A]">
+  Consider a donation to support our ongoing turtle and reef conservation
+  work.
+</p>
 
-            <p className="mt-3 text-[#16305A]">
-              Consider a donation to support our ongoing turtle and reef
-              conservation work.
-            </p>
+<p className="mt-3 text-sm text-[#16305A]/70">
+  Secure donations are processed through PayPal. No PayPal account required.
+  <br />
+  For other ways to support our work, please visit our website.
+</p>
 
 <div className="mt-5 flex justify-center">
   <form
@@ -259,27 +264,7 @@ export default function TurtleIdPage() {
     method="post"
     target="_top"
   >
-    <input
-      type="hidden"
-      name="hosted_button_id"
-      value="LL7SDKNJWQTA6"
-    />
-
-<input
-  type="image"
-  src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif"
-  name="submit"
-  title="PayPal - The safer, easier way to pay online!"
-  alt="Donate with PayPal button"
-/>
-
-<img
-  alt=""
-  src="https://www.paypal.com/en_LC/i/scr/pixel.gif"
-  width="1"
-  height="1"
-/>
-
+    ...
   </form>
 </div>
 
@@ -448,7 +433,7 @@ export default function TurtleIdPage() {
 
           <div className="rounded-2xl bg-white/70 p-5">
             <h2 className="text-lg font-semibold text-[#16305A]">
-              🐢 Stay updated on your turtle
+              🐢 Stay updated on your turtle (optional)
             </h2>
 
             <p className="mt-2 text-sm text-[#16305A]">
