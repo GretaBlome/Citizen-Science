@@ -168,9 +168,7 @@ export default function TurtleIdPage() {
         if (isImage) {
           await uploadImageNormally(selectedFile, filePath);
 
-          setUploadProgress(
-            Math.round(((i + 1) / files.length) * 100)
-          );
+          setUploadProgress(Math.round(((i + 1) / files.length) * 100));
         }
 
         uploadedPaths.push(filePath);
@@ -237,13 +235,45 @@ export default function TurtleIdPage() {
           />
 
           <h1 className="mt-12 text-5xl font-bold tracking-tight text-[#16305A] md:text-6xl">
-            Upload successful
+            Thank you!
           </h1>
 
           <p className="mt-8 max-w-xl text-xl leading-relaxed text-[#16305A] md:text-2xl">
-            Thank you for contributing to turtle identification and marine
-            conservation.
+            Your observation has been added to our turtle identification
+            database. Thanks for your contribution to sea turtle conservation!
           </p>
+
+          <div className="mt-10 w-full rounded-2xl bg-white p-6 text-center shadow-sm">
+            <h2 className="text-2xl font-bold text-[#16305A]">
+              Like this project?
+            </h2>
+
+            <p className="mt-3 text-[#16305A]">
+              Consider a donation to support our ongoing turtle and reef
+              conservation work.
+            </p>
+
+            <div className="mt-5">
+              <form
+                action="https://www.paypal.com/donate"
+                method="post"
+                target="_top"
+              >
+                <input
+                  type="hidden"
+                  name="hosted_button_id"
+                  value="LL7SDKNJWQTA6"
+                />
+
+                <button
+                  type="submit"
+                  className="rounded-2xl bg-[#16305A] px-8 py-4 text-lg font-semibold text-white shadow-lg transition hover:scale-[1.02]"
+                >
+                  Support our conservation work
+                </button>
+              </form>
+            </div>
+          </div>
 
           <div className="mt-10 flex w-full max-w-md flex-col gap-5">
             <a
@@ -408,18 +438,19 @@ export default function TurtleIdPage() {
 
           <div className="rounded-2xl bg-white/70 p-5">
             <h2 className="text-lg font-semibold text-[#16305A]">
-              Join the citizen science community (optional)
+              🐢 Stay updated on your turtle
             </h2>
 
             <p className="mt-2 text-sm text-[#16305A]">
-              Leave your email address or Instagram handle if you would like to
-              receive updates, connect with the community, or hear more about
-              the project.
+              Leave your email address to receive updates if this turtle is
+              identified or seen again in the
+              future. We'll keep you informed about new observations and help
+              you follow your turtle's journey over time.
             </p>
 
             <input
               type="email"
-              placeholder="Email address (optional)"
+              placeholder="Email for turtle updates"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               className="mt-4 w-full rounded-xl bg-white p-4 text-[#16305A] placeholder:text-[#16305A]"
