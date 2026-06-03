@@ -253,26 +253,36 @@ export default function TurtleIdPage() {
               conservation work.
             </p>
 
-            <div className="mt-5">
-              <form
-                action="https://www.paypal.com/donate"
-                method="post"
-                target="_top"
-              >
-                <input
-                  type="hidden"
-                  name="hosted_button_id"
-                  value="LL7SDKNJWQTA6"
-                />
+<div className="mt-5 flex justify-center">
+  <form
+    action="https://www.paypal.com/donate"
+    method="post"
+    target="_top"
+  >
+    <input
+      type="hidden"
+      name="hosted_button_id"
+      value="LL7SDKNJWQTA6"
+    />
 
-                <button
-                  type="submit"
-                  className="rounded-2xl bg-[#16305A] px-8 py-4 text-lg font-semibold text-white shadow-lg transition hover:scale-[1.02]"
-                >
-                  Support our conservation work
-                </button>
-              </form>
-            </div>
+<input
+  type="image"
+  src="https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif"
+  name="submit"
+  title="PayPal - The safer, easier way to pay online!"
+  alt="Donate with PayPal button"
+/>
+
+<img
+  alt=""
+  src="https://www.paypal.com/en_LC/i/scr/pixel.gif"
+  width="1"
+  height="1"
+/>
+
+  </form>
+</div>
+
           </div>
 
           <div className="mt-10 flex w-full max-w-md flex-col gap-5">
