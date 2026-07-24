@@ -1,30 +1,40 @@
 import Link from "next/link";
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <main className="min-h-screen bg-[#EDE6D8] flex flex-col items-center justify-center p-8">
-      <h1 className="text-5xl font-bold mb-4 text-center text-[#16305A]">
-        Citizen Science Upload
-      </h1>
+    <main className="min-h-screen bg-[#EDE6D8] px-6 py-10 text-[#16305A]">
+      <div className="mx-auto flex w-full max-w-xl flex-col items-center text-center">
+        <img
+          src="/logo.png"
+          alt="Great Isles Initiative"
+          className="h-24 w-24 rounded-full object-cover"
+        />
 
-      <p className="text-center text-[#16305A] mb-12 max-w-md text-lg">
-        Contribute your reef monitoring videos and turtle identification photos.
-      </p>
+        <h1 className="mt-8 text-4xl font-bold leading-tight">
+          Seen a sea turtle in Saint Lucia?
+        </h1>
 
-      <div className="flex flex-col gap-6 w-full max-w-sm">
-        <Link
-          href="/reef-monitoring"
-          className="bg-[#16305A] text-white text-xl font-semibold py-6 rounded-2xl shadow-lg hover:opacity-90 transition text-center"
-        >
-          Reef Monitoring
-        </Link>
+        <p className="mt-4 text-lg leading-relaxed">
+          Report your sighting and upload your photos now or later.
+        </p>
 
-        <Link
-          href="/turtle-id"
-          className="bg-[#16305A] text-white text-xl font-semibold py-6 rounded-2xl shadow-lg hover:opacity-90 transition text-center"
-        >
-          Turtle ID
-        </Link>
+        <p className="mt-3 leading-relaxed text-[#16305A]/80">
+          We&apos;ll let you know whether the turtle matched one of our known
+          individuals or represents a new identification.
+        </p>
+
+        <div className="mt-8">
+          <Link
+            href="/turtle-id"
+            className="flex w-full items-center justify-center rounded-2xl bg-[#16305A] px-6 py-5 text-lg font-semibold text-white shadow-md transition hover:opacity-90"
+          >
+            Report a Turtle Sighting
+          </Link>
+        </div>
+
+        <p className="mt-4 text-center text-sm text-[#16305A]/65">
+          Registration takes less than 30 seconds.
+        </p>
       </div>
     </main>
   );
