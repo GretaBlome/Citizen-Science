@@ -162,7 +162,8 @@ export default function TurtleSightingPage() {
 
     try {
       const sightingId = crypto.randomUUID();
-      const uploadedPaths = photoStatus === "now" ? await uploadFiles(sightingId) : [];
+      const uploadedPaths =
+        photoStatus === "now" ? await uploadFiles(sightingId) : [];
 
       const { error } = await supabase.from("turtle_sightings").insert([
         {
@@ -181,15 +182,34 @@ export default function TurtleSightingPage() {
         },
       ]);
 
-      if (error) throw error;
+      if (error) {
+        throw error;
+      }
 
       setUploadProgress(100);
       setUploadComplete(true);
-    } catch (error) {
-      console.error(error);
-      setErrorMessage(
-        error instanceof Error ? error.message : "Something went wrong. Please try again."
-      );
+    } catch (error: unknown) {
+      console.error("Turtle submission error:", error);
+
+      let message = "Something went wrong. Please try again.";
+
+      if (error instanceof Error) {
+        message = error.message;
+      } else if (
+        typeof error === "object" &&
+        error !== null &&
+        "message" in error
+      ) {
+        const possibleMessage = (error as { message?: unknown }).message;
+
+        if (typeof possibleMessage === "string") {
+          message = possibleMessage;
+        }
+      } else if (typeof error === "string") {
+        message = error;
+      }
+
+      setErrorMessage(message);
     } finally {
       setIsSubmitting(false);
     }
@@ -411,7 +431,12 @@ export default function TurtleSightingPage() {
                 type="file"
                 accept="image/*,video/*"
                 multiple
-                onChange={(event) => setFiles(Array.from(event.target.files ?? []))}
+                onChange={(event) => {
+                  const selectedFiles = event.currentTarget.files
+                    ? Array.from(event.currentTarget.files)
+                    : [];
+                  setFiles(selectedFiles);
+                }}
                 className="rounded-xl bg-white p-4"
               />
 
