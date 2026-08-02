@@ -486,41 +486,70 @@ export default function TurtleSightingPage() {
           />
 
           <div className="rounded-2xl bg-white/70 p-5">
-            <h2 className="text-lg font-semibold">🐢 Get an update on your turtle</h2>
+  {photoStatus === "now" ? (
+    <>
+      <h2 className="text-lg font-semibold">
+        🐢 Get an update on your turtle
+      </h2>
 
-            <p className="mt-2 text-sm leading-relaxed">
-              Enter your email so we can tell you whether your turtle was identified and which individual you encountered.
-            </p>
+      <p className="mt-2 text-sm leading-relaxed">
+        Enter your email so we can tell you whether your turtle was identified
+        and which individual you encountered.
+      </p>
 
-            <input
-              type="email"
-              required
-              placeholder="Email for your identification update"
-              value={email}
-              onChange={(event) => setEmail(event.target.value)}
-              className="mt-4 w-full rounded-xl bg-white p-4 placeholder:text-[#16305A]"
-            />
+      <input
+        type="email"
+        required
+        placeholder="Email for your identification update"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        className="mt-4 w-full rounded-xl bg-white p-4 placeholder:text-[#16305A]"
+      />
+    </>
+  ) : (
+    <>
+      <h2 className="text-lg font-semibold">
+        📸 We'll remind you to upload your photos
+      </h2>
 
-            <input
-              type="text"
-              placeholder="Instagram handle (optional)"
-              value={instagram}
-              onChange={(event) => setInstagram(event.target.value)}
-              className="mt-4 w-full rounded-xl bg-white p-4 placeholder:text-[#16305A]"
-            />
+      <p className="mt-2 text-sm leading-relaxed">
+        No problem if your photos are still on your camera. Enter your email
+        below and we'll send you a reminder in a few days, once you've had time
+        to transfer your photos.
+      </p>
 
-            <label className="mt-4 flex items-start gap-3 rounded-xl bg-white p-4">
-              <input
-                type="checkbox"
-                checked={newsletterConsent}
-                onChange={(event) => setNewsletterConsent(event.target.checked)}
-                className="mt-1"
-              />
-              <span className="text-sm leading-relaxed">
-                I would also like to receive occasional updates about sea turtle conservation and the Great Isles Initiative.
-              </span>
-            </label>
-          </div>
+      <input
+        type="email"
+        required
+        placeholder="Email for your upload reminder"
+        value={email}
+        onChange={(event) => setEmail(event.target.value)}
+        className="mt-4 w-full rounded-xl bg-white p-4 placeholder:text-[#16305A]"
+      />
+    </>
+  )}
+
+  <input
+    type="text"
+    placeholder="Instagram handle (optional)"
+    value={instagram}
+    onChange={(event) => setInstagram(event.target.value)}
+    className="mt-4 w-full rounded-xl bg-white p-4 placeholder:text-[#16305A]"
+  />
+
+  <label className="mt-4 flex items-start gap-3 rounded-xl bg-white p-4">
+    <input
+      type="checkbox"
+      checked={newsletterConsent}
+      onChange={(event) => setNewsletterConsent(event.target.checked)}
+      className="mt-1"
+    />
+    <span className="text-sm leading-relaxed">
+      I would also like to receive occasional updates about sea turtle
+      conservation and the Great Isles Initiative.
+    </span>
+  </label>
+</div>
 
           {errorMessage && (
             <div className="rounded-xl border border-red-300 bg-red-50 p-4 text-red-800">
