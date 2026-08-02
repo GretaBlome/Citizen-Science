@@ -343,33 +343,38 @@ export default function TurtleSightingPage() {
       `}</style>
 
       {isSubmitting && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#16305A]/95 px-4">
-          <div className="w-full max-w-md rounded-3xl bg-[#EDE6D8] p-5 text-center shadow-2xl">
-            <video
-              src="/turtle-analysis.mp4"
-              autoPlay
-              loop
-              muted
-              playsInline
-              className="max-h-[58vh] w-full rounded-2xl object-contain"
-            />
+  <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#16305A]/95 px-4">
+  <div className="w-full max-w-md rounded-3xl bg-[#EDE6D8] p-8 text-center shadow-2xl">
+    <img
+      src="/logo.png"
+      alt="Great Isles Initiative logo"
+      className="mx-auto h-28 w-28 rounded-full object-cover"
+    />
 
-            <div className="mt-5 h-3 overflow-hidden rounded-full bg-white">
-              <div
-                className="h-full rounded-full bg-[#16305A] transition-all"
-                style={{ width: `${uploadProgress}%` }}
-              />
-            </div>
+    <h2 className="mt-6 text-2xl font-bold text-[#16305A]">
+      {photoStatus === "now"
+        ? "Uploading your observation..."
+        : "Registering your observation..."}
+    </h2>
 
-            <p className="mt-3 font-semibold">
-              {photoStatus === "now"
-                ? `Uploading your turtle sighting ${uploadProgress}%`
-                : "Registering your turtle sighting..."}
-            </p>
+    <div className="mt-6 h-3 overflow-hidden rounded-full bg-white">
+      <div
+        className="h-full rounded-full bg-[#16305A] transition-all"
+        style={{ width: `${uploadProgress}%` }}
+      />
+    </div>
 
-            <p className="mt-2 text-sm text-[#16305A]/70">Please keep this page open.</p>
-          </div>
-        </div>
+    {photoStatus === "now" && (
+      <p className="mt-3 font-semibold text-[#16305A]">
+        {uploadProgress}%
+      </p>
+    )}
+
+    <p className="mt-3 text-sm text-[#16305A]/70">
+      Please keep this page open.
+    </p>
+  </div>
+</div>
       )}
 
       <div className="mx-auto max-w-xl">
